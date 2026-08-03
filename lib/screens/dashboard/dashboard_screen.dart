@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trackify/widgets/app_bottom_nav.dart';
 import '../../providers/auth_provider.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -20,6 +21,7 @@ class DashboardScreen extends ConsumerWidget {
         ],
       ),
       body: const Center(child: Text('Dashboard - dolazi sljedeći korak')),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );
   }
 }

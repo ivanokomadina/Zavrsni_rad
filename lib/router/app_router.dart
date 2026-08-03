@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trackify/models/habit.dart';
+import 'package:trackify/screens/habits/add_edit_habit_screen.dart';
+import 'package:trackify/screens/habits/habits_screen.dart';
 import '../providers/auth_provider.dart';
 import '../screens/splash/splash_screen.dart';
 import '../screens/onboarding/onboarding_screen.dart';
@@ -73,6 +76,25 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/dashboard',
         builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: '/habits',
+        builder: (context, state) => const HabitsScreen(),
+      ),
+      GoRoute(
+        path: '/habits/add',
+        builder: (context, state) => const AddEditHabitScreen(),
+      ),
+      GoRoute(
+        path: '/habits/edit/:id',
+        builder: (context, state) {
+          // U ovom koraku ne dohvaćamo habit po id-u iz route parametra
+          // direktno ovdje - jednostavnije rješenje: čitamo trenutni popis
+          // iz providera preko ProviderContainera routera. Umjesto toga,
+          // za sada prosljeđujemo Habit kroz 'extra' parametar iz habits_screen-a.
+          final habit = state.extra as Habit;
+          return AddEditHabitScreen(habitToEdit: habit);
+        },
       ),
     ],
   );
