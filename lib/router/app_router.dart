@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trackify/models/habit.dart';
+import 'package:trackify/models/obligation.dart';
 import 'package:trackify/screens/habits/add_edit_habit_screen.dart';
 import 'package:trackify/screens/habits/habits_screen.dart';
+import 'package:trackify/screens/obligations/add_edit_obligation_screen.dart';
+import 'package:trackify/screens/obligations/obligations_screen.dart';
 import '../providers/auth_provider.dart';
 import '../screens/splash/splash_screen.dart';
 import '../screens/onboarding/onboarding_screen.dart';
@@ -94,6 +97,21 @@ final routerProvider = Provider<GoRouter>((ref) {
           // za sada prosljeđujemo Habit kroz 'extra' parametar iz habits_screen-a.
           final habit = state.extra as Habit;
           return AddEditHabitScreen(habitToEdit: habit);
+        },
+      ),
+      GoRoute(
+        path: '/obligations',
+        builder: (context, state) => const ObligationsScreen(),
+      ),
+      GoRoute(
+        path: '/obligations/add',
+        builder: (context, state) => const AddEditObligationScreen(),
+      ),
+      GoRoute(
+        path: '/obligations/edit',
+        builder: (context, state) {
+          final obligation = state.extra as Obligation;
+          return AddEditObligationScreen(obligationToEdit: obligation);
         },
       ),
     ],
