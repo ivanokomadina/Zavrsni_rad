@@ -8,6 +8,7 @@ import 'package:trackify/screens/habits/add_edit_habit_screen.dart';
 import 'package:trackify/screens/habits/habits_screen.dart';
 import 'package:trackify/screens/obligations/add_edit_obligation_screen.dart';
 import 'package:trackify/screens/obligations/obligations_screen.dart';
+import 'package:trackify/screens/statistics/statistics_screen.dart';
 import '../providers/auth_provider.dart';
 import '../screens/splash/splash_screen.dart';
 import '../screens/onboarding/onboarding_screen.dart';
@@ -118,6 +119,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/calendar',
         builder: (context, state) => const CalendarScreen(),
+      ),
+      GoRoute(
+        path: '/statistics',
+        builder: (context, state) => const StatisticsScreen(),
       ),
     ],
   );
