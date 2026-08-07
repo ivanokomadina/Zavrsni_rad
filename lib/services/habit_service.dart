@@ -109,4 +109,20 @@ class HabitService {
       await db.insert('habit_logs', log.toMap());
     }
   }
+
+  /// Dohvaća sve logove unutar zadanog raspona datuma (uključivo).
+  /// Koristi se za kalendar - jedan upit za cijeli vidljivi mjesec,
+  /// umjesto zasebnog upita po danu (što bi bilo 30+ upita).
+  Future<List<HabitLog>> getLogsInRange(DateTime start, DateTime end) async {
+    final db = await _db.database;
+    final result = await db.query(
+      'habit_logs',
+      where: 'date >= ? AND date <= ?',
+      whereArgs: [
+        _dateOnly(start).toIso8601String(),
+        _dateOnly(end).toIso8601String(),
+      ],
+    );
+    return result.map((row) => HabitLog.fromMap(row)).toList();
+  }
 }

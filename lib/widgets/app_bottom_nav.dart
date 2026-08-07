@@ -10,7 +10,7 @@ class AppBottomNav extends StatelessWidget {
 
   const AppBottomNav({super.key, required this.currentIndex});
 
-  static const _routes = ['/dashboard', '/habits', '/obligations'];
+  static const _routes = ['/dashboard', '/habits', '/obligations', '/calendar'];
   // TODO: proširiti kad dodamo obligations/calendar/statistics ekrane
 
   @override
@@ -33,6 +33,11 @@ class AppBottomNav extends StatelessWidget {
           icon: Icon(Icons.task_alt_outlined),
           selectedIcon: Icon(Icons.task_alt),
           label: 'Obveze',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.calendar_month_outlined),
+          selectedIcon: Icon(Icons.calendar_month),
+          label: 'Kalendar',
         ),
       ],
     );

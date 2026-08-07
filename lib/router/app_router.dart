@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trackify/models/habit.dart';
 import 'package:trackify/models/obligation.dart';
+import 'package:trackify/screens/calendar/calendar_screen.dart';
 import 'package:trackify/screens/habits/add_edit_habit_screen.dart';
 import 'package:trackify/screens/habits/habits_screen.dart';
 import 'package:trackify/screens/obligations/add_edit_obligation_screen.dart';
@@ -113,6 +114,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           final obligation = state.extra as Obligation;
           return AddEditObligationScreen(obligationToEdit: obligation);
         },
+      ),
+      GoRoute(
+        path: '/calendar',
+        builder: (context, state) => const CalendarScreen(),
       ),
     ],
   );
