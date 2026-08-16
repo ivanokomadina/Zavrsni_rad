@@ -1,18 +1,27 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:trackify/providers/theme_provider.dart';
+import 'package:trackify/services/notification_service.dart';
 import 'router/app_router.dart';
 
-void main() {
-  // sqfliteFfiInit() postavlja FFI okruženje (učitava odgovarajuću
-  // native SQLite biblioteku za trenutnu desktop platformu).
-  sqfliteFfiInit();
+void main() async {
+  // Obavezno PRIJE bilo kakvog await poziva ili korištenja platform
+  // channela (poput NotificationService.initialize()) - Flutter to
+  // zahtijeva da bi mogao ispravno povezati engine s frameworkom.
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // Ovime kažemo sqflite paketu: "kad god itko pozove openDatabase()/
-  // getDatabasesPath() (globalne funkcije iz sqflite paketa), koristi
-  // FFI implementaciju umjesto defaultne mobile-only implementacije."
-  databaseFactory = databaseFactoryFfi;
+  // FFI implementacija SQLite-a treba se koristiti SAMO na desktopu -
+  // na Androidu/iOS-u sqflite već ima native implementaciju, pa
+  // postavljanje FFI factory-ja tamo nije potrebno.
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
+  await NotificationService.instance.initialize();
 
   runApp(const ProviderScope(child: TrackifyApp()));
 }

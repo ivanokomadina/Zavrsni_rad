@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trackify/services/notification_service.dart';
 import '../../providers/auth_provider.dart';
 
 /// ConsumerStatefulWidget - koristimo StatefulWidget varijantu jer
@@ -34,20 +35,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _handleSubmit() async {
-    // validate() provjerava sve validatore u Form widgetu i vraća
-    // false ako bar jedan ne prođe (i automatski prikazuje poruke greške).
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isSubmitting = true);
 
-    // ref.read (ne watch!) jer smo unutar callbacka, ne unutar build().
     await ref
         .read(authProvider.notifier)
         .register(name: _nameController.text.trim(), pin: _pinController.text);
 
-    // Bez ručne navigacije! Čim register() promijeni authProvider status
-    // u 'authenticated', GoRouterRefreshNotifier će to primijetiti i
-    // redirect() će sam prebaciti korisnika na /dashboard.
+    // Tražimo dozvolu za notifikacije i, ako je odobrena, odmah
+    // zakazujemo dnevni podsjetnik.
+    final granted = await NotificationService.instance.requestPermissions();
+    if (granted) {
+      await NotificationService.instance.scheduleDailyHabitReminder();
+    }
 
     if (mounted) {
       setState(() => _isSubmitting = false);
