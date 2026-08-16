@@ -101,6 +101,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
       errorMessage: null,
     );
   }
+
+  /// Ponovno učitava korisničke podatke iz baze i ažurira state.
+  /// Poziva se nakon operacija koje mijenjaju korisnika izvan
+  /// register()/login() toka - npr. nakon promjene PIN-a.
+  Future<void> refreshUser() async {
+    final updated = await _authService.getExistingUser();
+    if (updated != null) {
+      state = state.copyWith(user: updated);
+    }
+  }
 }
 
 /// Provider koji izlaže AuthNotifier ostatku aplikacije.

@@ -76,4 +76,19 @@ class AuthService {
       whereArgs: [userId],
     );
   }
+
+  /// Mijenja PIN korisnika. Pozivatelj (ekran) je odgovoran da PRIJE
+  /// poziva ove metode provjeri stari PIN kroz verifyPin() - ova
+  /// metoda samo sprema novi hash, ne provjerava ništa.
+  Future<void> updatePin({required int userId, required String newPin}) async {
+    final db = await _db.database;
+    final newHash = _hashPin(newPin);
+
+    await db.update(
+      'users',
+      {'pinHash': newHash},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
 }

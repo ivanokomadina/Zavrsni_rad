@@ -8,6 +8,8 @@ import 'package:trackify/screens/habits/add_edit_habit_screen.dart';
 import 'package:trackify/screens/habits/habits_screen.dart';
 import 'package:trackify/screens/obligations/add_edit_obligation_screen.dart';
 import 'package:trackify/screens/obligations/obligations_screen.dart';
+import 'package:trackify/screens/settings/change_pin_screen.dart';
+import 'package:trackify/screens/settings/settings_screen.dart';
 import 'package:trackify/screens/statistics/statistics_screen.dart';
 import '../providers/auth_provider.dart';
 import '../screens/splash/splash_screen.dart';
@@ -123,6 +125,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/statistics',
         builder: (context, state) => const StatisticsScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/settings/change-pin',
+        builder: (context, state) => const ChangePinScreen(),
       ),
     ],
   );

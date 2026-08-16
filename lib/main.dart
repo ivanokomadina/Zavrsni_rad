@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:trackify/providers/theme_provider.dart';
 import 'router/app_router.dart';
 
 void main() {
@@ -24,6 +25,7 @@ class TrackifyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final themeMode = ref.watch(themeProvider); // dodano
 
     // MaterialApp.router (umjesto običnog MaterialApp) je varijanta
     // napravljena za rad s "declarative" routing paketima poput go_router.
@@ -40,6 +42,8 @@ class TrackifyApp extends ConsumerWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
+      themeMode:
+          themeMode, // dodano - ranije nije bilo eksplicitno postavljeno (default je system)
       routerConfig: router,
     );
   }

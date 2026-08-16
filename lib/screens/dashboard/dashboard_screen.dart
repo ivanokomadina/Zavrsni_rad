@@ -65,6 +65,12 @@ class DashboardScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('${_greeting()}, ${authState.user?.name ?? ''}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            onPressed: () => context.push('/settings'),
+          ),
+        ],
       ),
       // RefreshIndicator omogućuje "povuci prema dolje da osvježiš" gestu -
       // uobičajen obrazac u mobilnim aplikacijama. Poziva oba loadX()
