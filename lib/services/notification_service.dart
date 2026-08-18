@@ -106,13 +106,13 @@ class NotificationService {
   /// Zakazuje dnevni podsjetnik za navike koji se PONAVLJA svaki dan
   /// u isto vrijeme.
   Future<void> scheduleDailyHabitReminder({
-    int hour = 20,
+    int hour = 8,
     int minute = 0,
   }) async {
     await _plugin.zonedSchedule(
       _dailyHabitReminderId,
       'Trackify podsjetnik',
-      'Ne zaboravi označiti svoje navike za danas!',
+      'Ne zaboravi odraditi svoje navike za danas!',
       _nextInstanceOfTime(hour, minute),
       const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -123,7 +123,7 @@ class NotificationService {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       // Govori iOS-u da vrijeme koje smo proslijedili (TZDateTime) treba
       // tumačiti kao APSOLUTNO vrijeme (točan datum i sat), a ne relativno
       // u odnosu na trenutak zakazivanja. "absoluteTime" je ispravan izbor
@@ -169,7 +169,7 @@ class NotificationService {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );

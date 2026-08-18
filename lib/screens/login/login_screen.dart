@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trackify/services/notification_service.dart';
 import '../../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -24,6 +25,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // a mi ga prikazujemo watchanjem stanja niže u build() metodi.
     // Ako je ispravan, status postaje 'authenticated' i redirect() sam
     // prebacuje na dashboard - opet, bez ručne navigacije.
+    await NotificationService.instance.requestPermissions();
   }
 
   @override
