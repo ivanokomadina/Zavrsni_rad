@@ -1,12 +1,12 @@
-/// Model koji predstavlja jednokratnu obvezu s rokom (npr. "Predaja zadaće").
+/// Model koji predstavlja jednokratnu obvezu s rokom
 class Obligation {
   final int? id;
   final String name;
   final String? description;
   final DateTime dueDate;
-  final String priority; // "low", "medium", "high"
-  final int? categoryId; // strani ključ prema Category (nullable - obveza ne mora imati kategoriju)
-  final String status; // "pending", "in_progress", "done"
+  final String priority;
+  final int? categoryId;
+  final String status;
 
   Obligation({
     this.id,

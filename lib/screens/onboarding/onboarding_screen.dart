@@ -3,9 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trackify/services/notification_service.dart';
 import '../../providers/auth_provider.dart';
 
-/// ConsumerStatefulWidget - koristimo StatefulWidget varijantu jer
-/// trebamo lokalno stanje (TextEditingController-e i _isSubmitting flag),
-/// a "Consumer" prefiks znači da widget ima pristup Riverpod "ref" objektu.
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -14,8 +11,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 }
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
-  // GlobalKey povezan s Form widgetom - omogućuje nam da pozovemo
-  // validaciju svih polja odjednom (formKey.currentState!.validate()).
+  // Omogućuje da se pozove validacija svih polja odjednom
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
@@ -26,8 +22,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   void dispose() {
-    // Controlleri MORAJU biti dispose-ani kad se widget makne sa stabla,
-    // inače nastaje memory leak (ostaju "zombie" objekti u memoriji).
     _nameController.dispose();
     _pinController.dispose();
     _confirmPinController.dispose();
@@ -43,8 +37,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         .read(authProvider.notifier)
         .register(name: _nameController.text.trim(), pin: _pinController.text);
 
-    // Tražimo dozvolu za notifikacije i, ako je odobrena, odmah
-    // zakazujemo dnevni podsjetnik.
+    // Traži se dozvola za obavijesti
     final granted = await NotificationService.instance.requestPermissions();
     if (granted) {
       await NotificationService.instance.scheduleDailyHabitReminder();

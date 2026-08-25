@@ -4,8 +4,7 @@ import 'database_service.dart';
 class ObligationService {
   final _db = DatabaseService.instance;
 
-  /// Dohvaća sve obveze, sortirane po roku (najbliži rok prvi).
-  /// Ovo je smisleno zadano sortiranje za "to-do" listu.
+  /// Dohvaća sve obveze, sortirane po roku
   Future<List<Obligation>> getAllObligations() async {
     final db = await _db.database;
     final result = await db.query('obligations', orderBy: 'dueDate ASC');
@@ -32,8 +31,7 @@ class ObligationService {
     await db.delete('obligations', where: 'id = ?', whereArgs: [id]);
   }
 
-  /// Ažurira SAMO status obveze - koristi se kad korisnik klikne
-  /// na obvezu da promijeni status bez otvaranja cijele forme za edit.
+  /// Ažurira samo status obveze
   Future<void> updateStatus({
     required int id,
     required String newStatus,

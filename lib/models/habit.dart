@@ -1,10 +1,10 @@
-/// Model koji predstavlja jednu naviku koju korisnik prati (npr. "Učenje 30 min").
+/// Model koji predstavlja jednu naviku koju korisnik prati
 class Habit {
   final int? id;
   final String name;
   final String? description;
   final String colorHex;
-  final String frequency; // npr. "daily", "weekly", ili CSV dana poput "mon,wed,fri"
+  final String frequency;
   final DateTime createdAt;
 
   Habit({
@@ -23,8 +23,6 @@ class Habit {
       'description': description,
       'colorHex': colorHex,
       'frequency': frequency,
-      // DateTime se ne može direktno spremiti u SQLite, pa ga pretvaramo
-      // u ISO 8601 string (npr. "2026-07-21T10:00:00.000") i natrag.
       'createdAt': createdAt.toIso8601String(),
     };
   }

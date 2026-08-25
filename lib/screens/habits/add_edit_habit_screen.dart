@@ -4,8 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../models/habit.dart';
 import '../../providers/habit_provider.dart';
 
-/// Preddefinirane boje iz kojih korisnik bira - jednostavnije od
-/// punog color pickera, i dovoljno za potrebe ove aplikacije.
+/// Preddefinirane boje iz kojih korisnik bira
 const _availableColors = [
   '#6750A4', // ljubičasta
   '#386A20', // zelena
@@ -15,7 +14,6 @@ const _availableColors = [
 ];
 
 class AddEditHabitScreen extends ConsumerStatefulWidget {
-  // Ako je habitToEdit != null, ekran radi u "edit" modu umjesto "add".
   final Habit? habitToEdit;
 
   const AddEditHabitScreen({super.key, this.habitToEdit});
@@ -36,8 +34,7 @@ class _AddEditHabitScreenState extends ConsumerState<AddEditHabitScreen> {
   @override
   void initState() {
     super.initState();
-    // Ako uređujemo postojeću naviku, polja se popunjavaju njenim podacima.
-    // Inače kreću prazna / na default vrijednosti.
+
     final habit = widget.habitToEdit;
     _nameController = TextEditingController(text: habit?.name ?? '');
     _descriptionController = TextEditingController(
@@ -66,8 +63,7 @@ class _AddEditHabitScreenState extends ConsumerState<AddEditHabitScreen> {
         description: _descriptionController.text.trim(),
         colorHex: _selectedColor,
         frequency: _selectedFrequency,
-        createdAt:
-            widget.habitToEdit!.createdAt, // ne mijenjamo datum kreiranja
+        createdAt: widget.habitToEdit!.createdAt,
       );
       await notifier.updateHabit(updated);
     } else {
@@ -79,7 +75,7 @@ class _AddEditHabitScreenState extends ConsumerState<AddEditHabitScreen> {
       );
     }
 
-    if (mounted) context.pop(); // vrati se na habits listu
+    if (mounted) context.pop();
   }
 
   Future<void> _handleDelete() async {
@@ -132,8 +128,7 @@ class _AddEditHabitScreenState extends ConsumerState<AddEditHabitScreen> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            // Wrap + ChoiceChip - standardan Flutter obrazac za odabir
-            // jedne opcije iz kratkog popisa (alternativa dropdownu).
+
             Wrap(
               spacing: 8,
               children: [

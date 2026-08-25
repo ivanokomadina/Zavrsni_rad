@@ -17,11 +17,7 @@ import '../screens/onboarding/onboarding_screen.dart';
 import '../screens/login/login_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 
-/// GoRouter po defaultu ne zna "osluškivati" Riverpod providere.
-/// Ova pomoćna klasa (ChangeNotifier) se pretplati na authProvider
-/// preko ref.listen() i, kad god se authProvider promijeni,
-/// pozove notifyListeners() - a to je signal koji GoRouter razumije
-/// (preko parametra refreshListenable) da ponovno evaluira redirect().
+/// Ova pomoćna klasa se pretplati na authProvider preko ref.listen() i, kad god se authProvider promijeni, pozove notifyListeners()
 class GoRouterRefreshNotifier extends ChangeNotifier {
   GoRouterRefreshNotifier(Ref ref) {
     ref.listen(authProvider, (previous, next) {
@@ -30,7 +26,7 @@ class GoRouterRefreshNotifier extends ChangeNotifier {
   }
 }
 
-/// Provider koji izlaže konfigurirani GoRouter ostatku aplikacije.
+/// Provider koji izlaže konfigurirani GoRouter ostatku aplikacije
 final routerProvider = Provider<GoRouter>((ref) {
   final refreshNotifier = GoRouterRefreshNotifier(ref);
 
@@ -38,38 +34,33 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/splash',
     refreshListenable: refreshNotifier,
 
-    // redirect() se poziva prije SVAKE navigacije (uključujući onu
-    // pokrenutu preko refreshListenable). Ovdje je centralizirana
-    // sva logika "tko smije vidjeti koji ekran".
+    // redirect() se poziva prije svake navigacije
     redirect: (context, state) {
       final authState = ref.read(authProvider);
       final currentPath = state.matchedLocation;
 
       switch (authState.status) {
         case AuthStatus.loading:
-          // Dok provjeravamo bazu, uvijek ostajemo na splashu.
+          // Dok provjeravamo bazu, uvijek ostajemo na splashu
           return currentPath == '/splash' ? null : '/splash';
 
         case AuthStatus.needsSetup:
-          // Nema profila - jedino dopušteno mjesto je onboarding.
+          // Nema profila
           return currentPath == '/onboarding' ? null : '/onboarding';
 
         case AuthStatus.unauthenticated:
-          // Profil postoji, ali nije unesen ispravan PIN - jedino login.
+          // Profil postoji, ali nije unesen ispravan PIN
           return currentPath == '/login' ? null : '/login';
 
         case AuthStatus.authenticated:
-          // Ulogiran korisnik ne smije biti na splash/onboarding/login -
-          // ako pokuša, prebacujemo ga na dashboard.
           const authOnlyPaths = ['/splash', '/onboarding', '/login'];
           if (authOnlyPaths.contains(currentPath)) {
             return '/dashboard';
           }
-          return null; // ostani gdje jesi
+          return null;
       }
     },
 
-    // null vraćen iz redirect() znači "ne preusmjeravaj, prikaži traženu rutu".
     routes: [
       GoRoute(
         path: '/splash',
@@ -95,10 +86,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/habits/edit/:id',
         builder: (context, state) {
-          // U ovom koraku ne dohvaćamo habit po id-u iz route parametra
-          // direktno ovdje - jednostavnije rješenje: čitamo trenutni popis
-          // iz providera preko ProviderContainera routera. Umjesto toga,
-          // za sada prosljeđujemo Habit kroz 'extra' parametar iz habits_screen-a.
           final habit = state.extra as Habit;
           return AddEditHabitScreen(habitToEdit: habit);
         },

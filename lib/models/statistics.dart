@@ -1,14 +1,12 @@
-/// Predstavlja postotak odrađenih navika za JEDAN dan - jedna "stupac"
-/// u tjednom bar chartu.
+/// Predstavlja postotak odrađenih navika za jedan dan u tjednom bar chartu
 class DayCompletion {
   final DateTime date;
-  final double percentage; // 0.0 - 1.0 (0% - 100%)
+  final double percentage;
 
   DayCompletion({required this.date, required this.percentage});
 }
 
-/// Predstavlja trenutni streak (niz uzastopnih odrađenih dana) za
-/// jednu naviku - koristi se za prikaz liste streakova.
+/// Predstavlja trenutni streak (niz uzastopnih odrađenih dana) za jednu naviku
 class HabitStreak {
   final String habitName;
   final String habitColorHex;

@@ -27,9 +27,6 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
 
-          // SegmentedButton - moderan Material 3 widget za odabir JEDNE
-          // opcije iz kratkog popisa, vizualno bolja alternativa
-          // klasičnom dropdownu ili radio dugmadima kad ima 2-4 opcije.
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SegmentedButton<ThemeMode>(
@@ -53,9 +50,6 @@ class SettingsScreen extends ConsumerWidget {
               selected: {themeMode},
               onSelectionChanged: (selection) {
                 if (userId != null) {
-                  // selection je Set<ThemeMode> (SegmentedButton podržava
-                  // i višestruki odabir općenito) - uzimamo .first jer
-                  // znamo da je odabir uvijek jedan (nismo dopustili multiSelect).
                   ref
                       .read(themeProvider.notifier)
                       .setThemeMode(selection.first, userId: userId);

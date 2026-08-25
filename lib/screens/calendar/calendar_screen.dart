@@ -14,8 +14,8 @@ class CalendarScreen extends ConsumerStatefulWidget {
 }
 
 class _CalendarScreenState extends ConsumerState<CalendarScreen> {
-  // focusedDay = koji mjesec je trenutno prikazan u gridu.
-  // selectedDay = koji je dan korisnik kliknuo (za prikaz obveza ispod).
+  // focusedDay = koji mjesec je trenutno prikazan u gridu
+  // selectedDay = koji je dan korisnik kliknuo (za prikaz obveza ispod)
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
 
@@ -25,14 +25,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // watch monthLogsProvider PARAMETRIZIRAN s _focusedDay - kad korisnik
-    // promijeni mjesec (što mijenja _focusedDay kroz setState), Riverpod
-    // automatski dohvaća (ili iz cachea vraća) logove za novi mjesec.
     final monthLogsAsync = ref.watch(monthLogsProvider(_focusedDay));
     final allObligations = ref.watch(obligationsProvider);
 
-    // Obveze čiji je rok jednak odabranom danu - koristi se ispod
-    // kalendara za prikaz detalja odabranog dana.
+    // Obveze čiji je rok jednak odabranom danu
     final obligationsForSelectedDay = allObligations
         .where((o) => _isSameDay(o.dueDate, _selectedDay))
         .toList();
@@ -41,9 +37,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       appBar: AppBar(title: const Text('Kalendar')),
       body: Column(
         children: [
-          // AsyncValue.when - standardni Riverpod obrazac za prikaz
-          // FutureProvider rezultata: tri moguća stanja (loading/error/data)
-          // MORAJU biti pokrivena, kompajler te na to prisiljava.
           monthLogsAsync.when(
             loading: () => const Padding(
               padding: EdgeInsets.all(32),
@@ -103,16 +96,12 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
           _focusedDay = focusedDay;
         });
       },
-      // onPageChanged se poziva kad korisnik prijeđe na sljedeći/prethodni
-      // mjesec (swipe ili strelice) - ažuriramo _focusedDay što automatski
-      // pokreće monthLogsProvider za novi mjesec (preko watch gore).
+
       onPageChanged: (focusedDay) {
         setState(() => _focusedDay = focusedDay);
       },
       calendarFormat: CalendarFormat.month,
-      // eventLoader vraća listu "događaja" za zadani dan - table_calendar
-      // ne zna što je unutra, samo koristi DULJINU liste da odluči
-      // koliko markera (točkica) iscrtati ispod tog dana.
+
       eventLoader: (day) {
         final events = [];
         events.addAll(
@@ -136,8 +125,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         ),
       ),
       headerStyle: const HeaderStyle(
-        formatButtonVisible:
-            false, // sakriva gumb za promjenu prikaza (mjesec/tjedan/2 tjedna) - ne trebamo ga
+        formatButtonVisible: false,
         titleCentered: true,
       ),
     );

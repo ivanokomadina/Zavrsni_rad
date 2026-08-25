@@ -46,7 +46,7 @@ class _AddEditObligationScreenState
     super.dispose();
   }
 
-  /// Otvara ugrađeni Flutter date picker dijalog i sprema odabrani datum.
+  /// Otvara ugrađeni Flutter date picker dijalog i sprema odabrani datum
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -54,15 +54,14 @@ class _AddEditObligationScreenState
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
     );
-    // showDatePicker vraća null ako korisnik otkaže dijalog - u tom
-    // slučaju ne diramo postojeći _selectedDate.
+
     if (picked != null) {
       setState(() => _selectedDate = picked);
     }
   }
 
   /// Otvara jednostavan dijalog za brzo kreiranje nove kategorije,
-  /// bez potrebe za zasebnim ekranom za upravljanje kategorijama.
+  /// bez potrebe za zasebnim ekranom za upravljanje kategorijama
   Future<void> _showAddCategoryDialog() async {
     final controller = TextEditingController();
 
@@ -89,8 +88,6 @@ class _AddEditObligationScreenState
     );
 
     if (name != null && name.isNotEmpty) {
-      // Koristimo neutralnu sivu boju za brzo dodane kategorije -
-      // korisnik uvijek može kasnije proširiti aplikaciju s color pickerom.
       final newCategory = await ref
           .read(categoriesProvider.notifier)
           .addCategory(name: name, colorHex: '#78909C');
@@ -111,9 +108,7 @@ class _AddEditObligationScreenState
         dueDate: _selectedDate,
         priority: _selectedPriority,
         categoryId: _selectedCategoryId,
-        status: widget
-            .obligationToEdit!
-            .status, // status se mijenja samo preko cycleStatus
+        status: widget.obligationToEdit!.status,
       );
       await notifier.updateObligation(updated);
     } else {
@@ -140,8 +135,6 @@ class _AddEditObligationScreenState
 
   @override
   Widget build(BuildContext context) {
-    // watch categoriesProvider ovdje - lista kategorija se osvježava
-    // odmah nakon što korisnik doda novu preko dijaloga iznad.
     final categories = ref.watch(categoriesProvider);
 
     return Scaffold(

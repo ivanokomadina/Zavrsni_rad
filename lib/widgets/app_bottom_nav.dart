@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Dijeljena bottom navigacija koja se koristi na svim glavnim ekranima.
-/// Umjesto da svaki ekran ponovno piše istu listu destinacija, definiramo
-/// je JEDNOM ovdje. Kad kasnije dodamo Obveze/Kalendar/Statistiku,
-/// mijenjamo samo ovu datoteku.
+/// Dijeljena bottom navigacija koja se koristi na svim glavnim ekranima
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
 
@@ -17,7 +14,6 @@ class AppBottomNav extends StatelessWidget {
     '/calendar',
     '/statistics',
   ];
-  // TODO: proširiti kad dodamo obligations/calendar/statistics ekrane
 
   @override
   Widget build(BuildContext context) {

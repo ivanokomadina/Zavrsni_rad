@@ -1,9 +1,9 @@
-/// Model korisničkog profila (lokalni, jedan korisnik po instalaciji aplikacije).
+/// Model korisničkog profila
 class AppUser {
   final int? id;
   final String name;
-  final String pinHash; // PIN se NE sprema kao čisti tekst, već kao hash (SHA-256)
-  final String themePreference; // "light", "dark", ili "system"
+  final String pinHash;
+  final String themePreference;
 
   AppUser({
     this.id,

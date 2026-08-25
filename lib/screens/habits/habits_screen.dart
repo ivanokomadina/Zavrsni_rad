@@ -10,9 +10,6 @@ class HabitsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ref.watch ovdje znači: kad god se habitsProvider promijeni
-    // (npr. korisnik doda naviku ili klikne checkbox), ovaj cijeli
-    // build() se ponovno pozove i lista se osvježi na ekranu.
     final habits = ref.watch(habitsProvider);
 
     return Scaffold(

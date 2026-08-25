@@ -4,7 +4,7 @@ import '../models/habit_display.dart';
 class HabitCard extends StatelessWidget {
   final HabitDisplay habitDisplay;
   final VoidCallback onToggle;
-  final VoidCallback? onTap; // za otvaranje detalja/uređivanja
+  final VoidCallback? onTap;
 
   const HabitCard({
     super.key,
@@ -16,7 +16,7 @@ class HabitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final habit = habitDisplay.habit;
-    // Pretvaramo hex string boje (npr. "#6750A4") u Flutter Color objekt.
+
     final color = Color(int.parse(habit.colorHex.replaceFirst('#', '0xFF')));
 
     return Card(

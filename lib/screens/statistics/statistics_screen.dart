@@ -25,10 +25,6 @@ class StatisticsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
 
-          // AsyncValue.when ovdje prati SAMO weeklyCompletionProvider -
-          // ako on još učitava, ostatak ekrana (streak lista, sažetak)
-          // se ne blokira, jer svaki AsyncValue.when reagira na SVOJ
-          // vlastiti provider neovisno.
           SizedBox(
             height: 200,
             child: weeklyAsync.when(
@@ -73,10 +69,9 @@ class StatisticsScreen extends ConsumerWidget {
   }
 }
 
-/// Bar chart koji prikazuje postotak odrađenih navika po danu -
-/// koristi fl_chart paket.
+/// Bar chart koji prikazuje postotak odrađenih navika po danu
 class _WeeklyBarChart extends StatelessWidget {
-  final List days; // List<DayCompletion>
+  final List days;
 
   const _WeeklyBarChart({required this.days});
 
@@ -84,12 +79,9 @@ class _WeeklyBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BarChart(
       BarChartData(
-        // maxY je maksimalna vrijednost Y osi - 1.0 jer percentage
-        // ide od 0.0 do 1.0 (0% - 100%).
         maxY: 1.0,
         alignment: BarChartAlignment.spaceAround,
 
-        // barGroups - jedan BarChartGroupData po danu (po stupcu).
         barGroups: days.asMap().entries.map((entry) {
           final index = entry.key;
           final day = entry.value;
@@ -107,9 +99,6 @@ class _WeeklyBarChart extends StatelessWidget {
           );
         }).toList(),
 
-        // titlesData definira što se ispisuje uz osi - ovdje samo
-        // dan u tjednu ispod svakog stupca (donja os), gornju/lijevu/
-        // desnu os sakrivamo jer ne trebamo brojčane oznake tamo.
         titlesData: FlTitlesData(
           leftTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: false),
@@ -126,8 +115,7 @@ class _WeeklyBarChart extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index < 0 || index >= days.length) return const SizedBox();
-                // DateFormat('E') vraća kratki naziv dana u tjednu
-                // (npr. "Mon", "Tue") prema trenutnoj lokalizaciji.
+
                 final label = DateFormat('E').format(days[index].date);
                 return Padding(
                   padding: const EdgeInsets.only(top: 4),
@@ -145,7 +133,7 @@ class _WeeklyBarChart extends StatelessWidget {
 }
 
 class _StreakTile extends StatelessWidget {
-  final dynamic streak; // HabitStreak
+  final dynamic streak;
 
   const _StreakTile({required this.streak});
 

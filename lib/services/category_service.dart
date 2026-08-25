@@ -1,8 +1,7 @@
 import '../models/category.dart';
 import 'database_service.dart';
 
-/// Servis za CRUD nad kategorijama. Namjerno jednostavan - kategorije
-/// se rijetko mijenjaju pa nam ne treba puno operacija.
+/// Servis za CRUD nad kategorijama
 class CategoryService {
   final _db = DatabaseService.instance;
 

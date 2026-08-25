@@ -21,17 +21,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _handleLogin() async {
     await ref.read(authProvider.notifier).login(_pinController.text);
-    // Ako je PIN pogrešan, authProvider postavlja errorMessage,
-    // a mi ga prikazujemo watchanjem stanja niže u build() metodi.
-    // Ako je ispravan, status postaje 'authenticated' i redirect() sam
-    // prebacuje na dashboard - opet, bez ručne navigacije.
+
     await NotificationService.instance.requestPermissions();
   }
 
   @override
   Widget build(BuildContext context) {
-    // ref.watch OVDJE (unutar build) je ispravno - želimo da se
-    // widget rebuilda kad god se pojavi/promijeni errorMessage.
     final authState = ref.watch(authProvider);
     final userName = authState.user?.name ?? '';
 
@@ -68,8 +63,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   labelText: 'PIN',
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.lock_outline),
-                  // Prikazujemo poruku greške direktno iz authProvider stanja -
-                  // nema potrebe za zasebnim lokalnim errorText poljem.
+
                   errorText: authState.errorMessage,
                 ),
                 keyboardType: TextInputType.number,

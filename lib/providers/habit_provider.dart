@@ -3,9 +3,7 @@ import '../models/habit.dart';
 import '../models/habit_display.dart';
 import '../services/habit_service.dart';
 
-/// StateNotifier koji drži popis navika ZAJEDNO s njihovim statusom
-/// za danas (List<HabitDisplay>). Ovo je "source of truth" za sve
-/// ekrane koji trebaju prikazati navike (dashboard, habits screen).
+/// StateNotifier koji drži popis navika zajedno s njihovim statusom za danas
 class HabitsNotifier extends StateNotifier<List<HabitDisplay>> {
   final HabitService _service;
 
@@ -13,14 +11,11 @@ class HabitsNotifier extends StateNotifier<List<HabitDisplay>> {
     loadHabits();
   }
 
-  /// Učitava navike iz baze i spaja ih s današnjim logovima.
-  /// Poziva se pri inicijalizaciji i nakon svake CRUD operacije.
+  /// Učitava navike iz baze i spaja ih s današnjim logovima
   Future<void> loadHabits() async {
     final habits = await _service.getAllHabits();
     final todayLogs = await _service.getLogsForDate(DateTime.now());
 
-    // Skup ID-eva navika koje imaju log za danas - koristimo Set
-    // umjesto List radi brže provjere "contains" (O(1) umjesto O(n)).
     final completedHabitIds = todayLogs.map((log) => log.habitId).toSet();
 
     state = habits.map((habit) {
@@ -45,7 +40,7 @@ class HabitsNotifier extends StateNotifier<List<HabitDisplay>> {
       createdAt: DateTime.now(),
     );
     await _service.insertHabit(habit);
-    await loadHabits(); // ponovno učitaj cijeli popis da UI odmah vidi novu naviku
+    await loadHabits();
   }
 
   Future<void> updateHabit(Habit updatedHabit) async {
@@ -58,8 +53,7 @@ class HabitsNotifier extends StateNotifier<List<HabitDisplay>> {
     await loadHabits();
   }
 
-  /// Poziva se kad korisnik klikne checkbox pored navike na dashboardu/
-  /// habits ekranu.
+  /// Poziva se kad korisnik klikne checkbox pored navike na dashboardu/habits ekranu
   Future<void> toggleToday(int habitId) async {
     await _service.toggleCompletion(habitId: habitId, date: DateTime.now());
     await loadHabits();

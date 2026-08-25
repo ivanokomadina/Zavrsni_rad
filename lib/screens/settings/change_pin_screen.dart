@@ -39,9 +39,7 @@ class _ChangePinScreenState extends ConsumerState<ChangePinScreen> {
 
     final user = ref.read(authProvider).user!;
 
-    // Prvo provjeravamo je li trenutni PIN stvarno ispravan - ne smijemo
-    // dopustiti promjenu PIN-a samo na temelju toga da je netko trenutno
-    // ulogiran (npr. netko drugi uzme telefon dok je app otključana).
+    // Provjerava je li trenutni PIN ispravan
     final isCurrentValid = await _authService.verifyPin(
       user: user,
       enteredPin: _currentPinController.text,
@@ -60,8 +58,6 @@ class _ChangePinScreenState extends ConsumerState<ChangePinScreen> {
       newPin: _newPinController.text,
     );
 
-    // Bez ovoga bi authProvider i dalje u memoriji držao AppUser sa
-    // STARIM pinHash-em (vidi objašnjenje uz refreshUser() gore).
     await ref.read(authProvider.notifier).refreshUser();
 
     if (mounted) {
@@ -86,8 +82,7 @@ class _ChangePinScreenState extends ConsumerState<ChangePinScreen> {
               decoration: InputDecoration(
                 labelText: 'Trenutni PIN',
                 border: const OutlineInputBorder(),
-                errorText:
-                    _errorMessage, // prikazuje grešku iz verifyPin provjere
+                errorText: _errorMessage,
               ),
               keyboardType: TextInputType.number,
               obscureText: true,

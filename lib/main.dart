@@ -8,14 +8,9 @@ import 'package:trackify/services/notification_service.dart';
 import 'router/app_router.dart';
 
 void main() async {
-  // Obavezno PRIJE bilo kakvog await poziva ili korištenja platform
-  // channela (poput NotificationService.initialize()) - Flutter to
-  // zahtijeva da bi mogao ispravno povezati engine s frameworkom.
   WidgetsFlutterBinding.ensureInitialized();
 
-  // FFI implementacija SQLite-a treba se koristiti SAMO na desktopu -
-  // na Androidu/iOS-u sqflite već ima native implementaciju, pa
-  // postavljanje FFI factory-ja tamo nije potrebno.
+  // FFI implementacija SQLite-a za pokretanje na desktopu
   if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
@@ -26,18 +21,14 @@ void main() async {
   runApp(const ProviderScope(child: TrackifyApp()));
 }
 
-/// ConsumerWidget umjesto StatelessWidget jer treba pristup 'ref'
-/// da dohvati routerProvider.
 class TrackifyApp extends ConsumerWidget {
   const TrackifyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    final themeMode = ref.watch(themeProvider); // dodano
+    final themeMode = ref.watch(themeProvider);
 
-    // MaterialApp.router (umjesto običnog MaterialApp) je varijanta
-    // napravljena za rad s "declarative" routing paketima poput go_router.
     return MaterialApp.router(
       title: 'Trackify',
       debugShowCheckedModeBanner: false,
@@ -51,8 +42,7 @@ class TrackifyApp extends ConsumerWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      themeMode:
-          themeMode, // dodano - ranije nije bilo eksplicitno postavljeno (default je system)
+      themeMode: themeMode,
       routerConfig: router,
     );
   }

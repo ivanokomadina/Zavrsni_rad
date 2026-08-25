@@ -1,8 +1,7 @@
-/// Model koji predstavlja "odrađivanje" navike za određeni dan.
-/// Jedan Habit ima mnogo HabitLog zapisa (jedan po danu kad je označen kao odrađen).
+/// Model koji predstavlja odrađivanje navike za određeni dan
 class HabitLog {
   final int? id;
-  final int habitId; // strani ključ (foreign key) - povezuje log s konkretnom navikom
+  final int habitId; // strani ključ - povezuje log s konkretnom navikom
   final DateTime date;
   final bool completed;
 
@@ -18,7 +17,6 @@ class HabitLog {
       'id': id,
       'habitId': habitId,
       'date': date.toIso8601String(),
-      // SQLite nema bool tip, pa ga spremamo kao 0/1 (INTEGER)
       'completed': completed ? 1 : 0,
     };
   }

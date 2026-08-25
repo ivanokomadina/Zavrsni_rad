@@ -12,8 +12,7 @@ import '../../widgets/app_bottom_nav.dart';
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
-  /// Vraća pozdrav ovisan o dobu dana - mala UX sitnica koja čini
-  /// dashboard "živim", umjesto statičnog naslova.
+  /// Vraća pozdrav ovisan o dobu dana
   String _greeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) return 'Dobro jutro';
@@ -21,15 +20,7 @@ class DashboardScreen extends ConsumerWidget {
     return 'Dobra večer';
   }
 
-  /// Vraća obveze koje su relevantne za dashboard: već gotove
-  /// izostavljamo (nema smisla prikazivati ih na "danas" pregledu),
-  /// a od preostalih uzimamo samo one s rokom u sljedećih 7 dana
-  /// (uključujući i one koje kasne - "isBefore(sevenDaysFromNow)"
-  /// hvata i prošle datume).
-  ///
-  /// Ova metoda je čista funkcija (ne ovisi o stanju izvan parametara,
-  /// ne mijenja ništa) - lako ju je testirati zasebno, kad bismo
-  /// dodali unit testove.
+  /// Vraća obveze koje su relevantne za dashboard
   List<Obligation> _relevantObligations(List<Obligation> all) {
     final sevenDaysFromNow = DateTime.now().add(const Duration(days: 7));
 
@@ -38,27 +29,19 @@ class DashboardScreen extends ConsumerWidget {
       return o.dueDate.isBefore(sevenDaysFromNow);
     }).toList();
 
-    // Sortiramo tako da zakašnjele i hitne obveze budu na vrhu -
-    // obligationsProvider ih već vraća sortirane po dueDate, ali
-    // eksplicitni sort ovdje čini kod čitljivijim bez oslanjanja
-    // na to "kako slučajno dolaze" iz providera.
     filtered.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     return filtered;
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Tri providera se prate odjednom - svaki put kad se BILO KOJI
-    // od njih promijeni, ovaj build() se ponovno pokreće i cijeli
-    // dashboard se osvježi.
     final authState = ref.watch(authProvider);
     final habits = ref.watch(habitsProvider);
     final allObligations = ref.watch(obligationsProvider);
 
     final relevantObligations = _relevantObligations(allObligations);
 
-    // Brza statistika za "napredak danas" traku pri vrhu -
-    // koliko od ukupnih navika je već odrađeno.
+    // Brza statistika za traku pri vrhu - koliko od ukupnih navika je već odrađeno
     final completedCount = habits.where((h) => h.completedToday).length;
     final totalCount = habits.length;
 
@@ -72,9 +55,7 @@ class DashboardScreen extends ConsumerWidget {
           ),
         ],
       ),
-      // RefreshIndicator omogućuje "povuci prema dolje da osvježiš" gestu -
-      // uobičajen obrazac u mobilnim aplikacijama. Poziva oba loadX()
-      // odjednom preko Future.wait, pa se korisniku ne čeka dvostruko dulje.
+
       body: RefreshIndicator(
         onRefresh: () => Future.wait([
           ref.read(habitsProvider.notifier).loadHabits(),
@@ -93,9 +74,6 @@ class DashboardScreen extends ConsumerWidget {
             if (habits.isEmpty)
               const _EmptyHint(text: 'Nemaš još nijednu naviku.')
             else
-              // Na dashboardu prikazujemo samo prvih nekoliko navika
-              // (ne cijelu listu) - detaljan pregled je na /habits ekranu.
-              // take(4) uzima najviše 4 elementa liste.
               ...habits
                   .take(4)
                   .map(
@@ -133,10 +111,6 @@ class DashboardScreen extends ConsumerWidget {
   }
 }
 
-/// Privatni (ispod donje crte "_") widget - vidljiv samo unutar ove
-/// datoteke. Koristimo ovo za manje komponente koje nema smisla
-/// izdvajati u zaseban dijeljeni widgets/ fajl jer se koriste SAMO
-/// na dashboardu.
 class _ProgressBanner extends StatelessWidget {
   final int completed;
   final int total;
@@ -160,8 +134,7 @@ class _ProgressBanner extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            // ClipRRect + LinearProgressIndicator - traka napretka
-            // sa zaobljenim rubovima, standardan moderan izgled.
+
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: LinearProgressIndicator(value: progress, minHeight: 8),

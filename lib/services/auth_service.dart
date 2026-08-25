@@ -4,23 +4,18 @@ import '../models/user.dart';
 import 'database_service.dart';
 
 /// Servis odgovoran za autentikaciju: hashiranje PIN-a te spremanje/
-/// dohvaćanje korisničkog profila iz baze. Aplikacija je single-user,
-/// pa uvijek radimo s najviše jednim retkom u tablici 'users'.
+/// dohvaćanje korisničkog profila iz baze
 class AuthService {
   final _db = DatabaseService.instance;
 
-  /// Hashira PIN pomoću SHA-256 algoritma.
-  /// NIKAD ne spremamo PIN u čistom (plain text) obliku - uvijek samo hash.
-  /// SHA-256 je jednosmjerna funkcija: lako je izračunati hash iz PIN-a,
-  /// ali (praktički) nemoguće izračunati PIN natrag iz hasha.
+  /// Hashira PIN pomoću SHA-256 algoritma
   String _hashPin(String pin) {
-    final bytes = utf8.encode(pin); // string -> bytes
-    final digest = sha256.convert(bytes); // bytes -> hash
-    return digest.toString(); // hash -> hex string za spremanje u bazu
+    final bytes = utf8.encode(pin);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
-  /// Provjerava postoji li već kreiran korisnički profil.
-  /// Vraća AppUser ako postoji, ili null ako je ovo prvo pokretanje aplikacije.
+  /// Provjerava postoji li već kreiran korisnički profil
   Future<AppUser?> getExistingUser() async {
     final db = await _db.database;
     final result = await db.query('users', limit: 1);
@@ -29,8 +24,7 @@ class AuthService {
     return AppUser.fromMap(result.first);
   }
 
-  /// Kreira novi korisnički profil (poziva se samo jednom, kod onboardinga).
-  /// PIN se hashira PRIJE spremanja u bazu.
+  /// Kreira novi korisnički profil
   Future<AppUser> createUser({
     required String name,
     required String pin,
@@ -52,9 +46,7 @@ class AuthService {
     );
   }
 
-  /// Provjerava odgovara li uneseni PIN spremljenom hashu.
-  /// Hashira uneseni PIN i uspoređuje ga sa spremljenim hashem -
-  /// nikad se ne dohvaća/uspoređuje "pravi" PIN.
+  /// Provjerava odgovara li uneseni PIN spremljenom hashu
   Future<bool> verifyPin({
     required AppUser user,
     required String enteredPin,
@@ -63,7 +55,7 @@ class AuthService {
     return enteredHash == user.pinHash;
   }
 
-  /// Ažurira temu korisnika (koristit ćemo kasnije u postavkama).
+  /// Ažurira temu korisnika
   Future<void> updateThemePreference({
     required int userId,
     required String theme,
@@ -77,9 +69,7 @@ class AuthService {
     );
   }
 
-  /// Mijenja PIN korisnika. Pozivatelj (ekran) je odgovoran da PRIJE
-  /// poziva ove metode provjeri stari PIN kroz verifyPin() - ova
-  /// metoda samo sprema novi hash, ne provjerava ništa.
+  /// Mijenja PIN korisnika
   Future<void> updatePin({required int userId, required String newPin}) async {
     final db = await _db.database;
     final newHash = _hashPin(newPin);

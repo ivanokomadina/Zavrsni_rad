@@ -14,8 +14,7 @@ class ObligationCard extends StatelessWidget {
     this.onTap,
   });
 
-  /// Vraća boju vezanu uz prioritet - vizualni signal na prvi pogled
-  /// bez potrebe za čitanjem teksta.
+  /// Vraća boju vezanu uz prioritet
   Color _priorityColor(BuildContext context) {
     switch (obligation.priority) {
       case 'high':
@@ -40,8 +39,6 @@ class ObligationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // DateFormat iz 'intl' paketa - formatira DateTime u čitljiv string
-    // prema zadanom obrascu. 'dd.MM.yyyy.' je uobičajen hrvatski format.
     final formattedDate = DateFormat('dd.MM.yyyy.').format(obligation.dueDate);
     final isOverdue =
         obligation.status != 'done' &&
@@ -51,12 +48,7 @@ class ObligationCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: ListTile(
         onTap: onTap,
-        leading: Container(
-          width: 4,
-          // Mala obojena traka sa strane kartice - brz vizualni indikator
-          // prioriteta, uobičajen obrazac u modernim to-do aplikacijama.
-          color: _priorityColor(context),
-        ),
+        leading: Container(width: 4, color: _priorityColor(context)),
         title: Text(
           obligation.name,
           style: obligation.status == 'done'
