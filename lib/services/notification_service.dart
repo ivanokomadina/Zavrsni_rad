@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
@@ -94,6 +95,8 @@ class NotificationService {
     int hour = 8,
     int minute = 0,
   }) async {
+    if (!Platform.isAndroid && !Platform.isIOS) return;
+
     await _plugin.zonedSchedule(
       _dailyHabitReminderId,
       'Trackify podsjetnik',
@@ -117,11 +120,15 @@ class NotificationService {
   }
 
   Future<void> cancelDailyHabitReminder() async {
+    if (!Platform.isAndroid && !Platform.isIOS) return;
+
     await _plugin.cancel(_dailyHabitReminderId);
   }
 
   /// Zakazuje podsjetnik za rok jedne obveze
   Future<void> scheduleObligationReminder(Obligation obligation) async {
+    if (!Platform.isAndroid && !Platform.isIOS) return;
+
     final scheduledDate = tz.TZDateTime(
       tz.local,
       obligation.dueDate.year,
@@ -154,11 +161,15 @@ class NotificationService {
   }
 
   Future<void> cancelObligationReminder(int obligationId) async {
+    if (!Platform.isAndroid && !Platform.isIOS) return;
+
     await _plugin.cancel(obligationId);
   }
 
   /// Otkazuje sve zakazane notifikacije
   Future<void> cancelAll() async {
+    if (!Platform.isAndroid && !Platform.isIOS) return;
+
     await _plugin.cancelAll();
   }
 }
